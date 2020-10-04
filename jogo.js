@@ -164,10 +164,12 @@ function criaCanos() {
     },
     espaco: 80,
     desenha() {
+    	const yRandom = -150;
+    	const espacamentoCanos = 90;
      
   
         const canoCeuX = 220;
-        const canoCeuY = 0; 
+        const canoCeuY = yRandom; 
 
         // [Cano do Céu]
         contexto.drawImage(
@@ -177,8 +179,10 @@ function criaCanos() {
           canoCeuX, canoCeuY,
           canos.largura, canos.altura,
         )
+         // [Cano do Chao]
         const canoChaoX = 220;
-        const canoChaoY = canos.altura; 
+        const canoChaoY = canos.altura + espacamentoCanos + yRandom; 
+
         contexto.drawImage(
           sprites, 
           canos.chao.spriteX, canos.chao.spriteY,
