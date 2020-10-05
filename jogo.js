@@ -7,6 +7,8 @@ const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 
 let frames = 0;
+let recorde = 0;
+let soma = 0;
 const son_hit = new Audio();
 son_hit.src = './efeitos/hit.wav';
 
@@ -106,6 +108,7 @@ const flappyBird = {
 
 	atualiza(){
 		if(fazColisao(flappyBird,globais.chao)){
+			soma = 0;
 			son_hit.play();
 			setTimeout(() =>{
 				mudaPraTela(Telas.INICIO);
@@ -166,7 +169,7 @@ function criaCanos() {
     desenha() {
     	canos.pares.forEach(function(par) {
     		const yRandom = par.y;
-    	const espacamentoCanos = 90;
+    	const espacamentoCanos = 120;
      
   
         const canoCeuX = par.x;
@@ -209,10 +212,15 @@ function criaCanos() {
     			if(globais.flappyBird.xcanv >= par.x){
     			
     				if(cabecaDoFlappy <= par.canoCeu.y){
+    					soma = 0;
     					return true;
+    					
+
     				}
     				if(peDoFlappy >= par.canoChao.y){
+    					soma = 0;
     					return true;
+    				
 
     				}
     			}
@@ -223,8 +231,10 @@ function criaCanos() {
     	
     	pares: [
     	],
+
     	atualiza(){
     		const p100frames = frames % 100 === 0;
+    		
     		if(p100frames){
     			canos.pares.push({
     				x:canvas.width,
@@ -241,6 +251,13 @@ function criaCanos() {
 
     			if(par.x + canos.largura <= 0){
     				canos.pares.shift();
+    				
+    				soma = soma + 1;
+    				console.log("Soma: "+soma);
+    				if(soma >= recorde){
+    					recorde = soma;
+    				}
+    				console.log("recorde: "+recorde);
     			}
     		});
     	}
