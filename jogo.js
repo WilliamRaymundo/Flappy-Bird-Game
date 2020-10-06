@@ -1,4 +1,4 @@
-console.log('[DevSoutinho] Flappy Bird');
+
 
 const sprites = new Image();
 sprites.src = './sprites.png';
@@ -44,6 +44,8 @@ const chao = {
       (chao.x + chao.largura), chao.y,//assim pegamos o segundo chão e colocamos na frente do otro chão
       chao.largura, chao.altura,
     );
+
+
   },
 }
 return chao;
@@ -169,7 +171,7 @@ function criaCanos() {
     desenha() {
     	canos.pares.forEach(function(par) {
     		const yRandom = par.y;
-    	const espacamentoCanos = 120;
+    	const espacamentoCanos = 90;
      
   
         const canoCeuX = par.x;
@@ -246,13 +248,15 @@ function criaCanos() {
     			par.x = par.x - 2;
 
     			if(canos.temColisao(par)){	
-				mudaPraTela(Telas.INICIO);
+				mudaPraTela(Telas.SCORE);
     			}
 
     			if(par.x + canos.largura <= 0){
     				canos.pares.shift();
     				
     				soma = soma + 1;
+
+
     				console.log("Soma: "+soma);
     				if(soma >= recorde){
     					recorde = soma;
@@ -286,8 +290,21 @@ const msgIncial = {
       msgIncial.largura, msgIncial.altura,
     );
 
+
   },
 };
+
+const msgScore = {
+	desenha() {
+    	contexto.font='50px Rubik Mono One';
+		contexto.fillStyle='white';
+		contexto.lineWidth=4;
+		contexto.fillText(""+soma, (canvas.width / 2)-50/2, 100);
+
+},
+};
+
+
 const globais = {};
 let TelaAtiva = {};
 	function mudaPraTela(novaTela){
@@ -309,9 +326,8 @@ const Telas = {
 		},
 		desenha(){
 			planoDeFundo.desenha();
-			  			globais.chao.desenha();
+			globais.chao.desenha();
   			globais.flappyBird.desenha();
-
 			msgIncial.desenha();
 
 		},
@@ -340,7 +356,27 @@ Telas.JOGO = {
 		globais.chao.atualiza();
 		globais.flappyBird.atualiza();
 		globais.canos.atualiza();
+		contexto.font='50px Rubik Mono One';
+		contexto.fillStyle='white';
+		contexto.lineWidth=4;
+		contexto.fillText(""+soma, (canvas.width / 2)-50/2, 100);
+
 	}
+};
+Telas.SCORE = {
+
+	desenha(){
+		planoDeFundo.desenha();
+		globais.canos.desenha();
+  		globais.chao.desenha();
+
+  		globais.flappyBird.desenha();
+
+  		msgScore.desenha();
+	},
+	click(){
+		mudaPraTela(Telas.JOGO);
+	},
 };
 
 
