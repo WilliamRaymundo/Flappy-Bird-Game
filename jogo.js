@@ -104,7 +104,9 @@ const flappyBird = {
 	velocidade: 0,
 	gravidade:0.25,
 	pulo:4.6,
+
 	pula(){
+
 		flappyBird.velocidade =- flappyBird.pulo;
 	},
 
@@ -248,7 +250,7 @@ function criaCanos() {
     			par.x = par.x - 2;
 
     			if(canos.temColisao(par)){	
-				mudaPraTela(Telas.SCORE);
+				mudaPraTela(Telas.INICIO);
     			}
 
     			if(par.x + canos.largura <= 0){
@@ -302,6 +304,16 @@ const msgScore = {
 		contexto.fillText(""+soma, (canvas.width / 2)-50/2, 100);
 
 },
+
+};
+
+const recor = {
+	desenha() {
+		contexto.font='30px Rubik Mono One';
+		contexto.fillStyle='white';
+		contexto.lineWidth=4;
+		contexto.fillText("Recorde:"+recorde, (canvas.width / 2)-100, 250);
+	},
 };
 
 
@@ -329,6 +341,7 @@ const Telas = {
 			globais.chao.desenha();
   			globais.flappyBird.desenha();
 			msgIncial.desenha();
+			recor.desenha();
 
 		},
 		click(){
@@ -342,6 +355,7 @@ const Telas = {
 };
 
 Telas.JOGO = {
+
 	desenha(){
 		planoDeFundo.desenha();
 		globais.canos.desenha();
@@ -363,21 +377,7 @@ Telas.JOGO = {
 
 	}
 };
-Telas.SCORE = {
 
-	desenha(){
-		planoDeFundo.desenha();
-		globais.canos.desenha();
-  		globais.chao.desenha();
-
-  		globais.flappyBird.desenha();
-
-  		msgScore.desenha();
-	},
-	click(){
-		mudaPraTela(Telas.JOGO);
-	},
-};
 
 
 function loop(){ //a ordem faz diferença
