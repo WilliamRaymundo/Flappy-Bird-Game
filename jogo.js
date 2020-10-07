@@ -12,6 +12,13 @@ let soma = 0;
 const son_hit = new Audio();
 son_hit.src = './efeitos/hit.wav';
 
+const son_ponto = new Audio();
+son_ponto.src = './efeitos/ponto.wav';
+
+const son_pulo = new Audio();
+son_pulo.src = './efeitos/pulo.wav';
+
+
 
 // [Chao]
 function criaChao(){
@@ -106,7 +113,7 @@ const flappyBird = {
 	pulo:4.6,
 
 	pula(){
-
+		son_pulo.play();
 		flappyBird.velocidade =- flappyBird.pulo;
 	},
 
@@ -143,7 +150,7 @@ const flappyBird = {
     	
     },
 	desenha(){
-		flappyBird. atualizaFrameAtual();
+		flappyBird.atualizaFrameAtual();
 		const {spriteX, spriteY} = flappyBird.movimentos[flappyBird.frameAtual];
 		contexto.drawImage(
 			sprites,
@@ -152,6 +159,25 @@ const flappyBird = {
 			flappyBird.xcanv,flappyBird.ycanv, //posição do sprite no canvas
 			flappyBird.largura,flappyBird.altura,  // tamanho do sprit no canvas
 		);
+
+
+
+
+
+	},
+	desenhaTravada(){
+		contexto.drawImage(
+			sprites,
+			0,0, //sprite x, e y
+			flappyBird.largura,flappyBird.altura, //tamanho do recorte
+			flappyBird.xcanv,flappyBird.ycanv, //posição do sprite no canvas
+			flappyBird.largura,flappyBird.altura,  // tamanho do sprit no canvas
+		);
+		
+
+
+
+
 	}
 }
 return flappyBird;
@@ -216,13 +242,14 @@ function criaCanos() {
     			if(globais.flappyBird.xcanv >= par.x){
     			
     				if(cabecaDoFlappy <= par.canoCeu.y){
-    					soma = 0;
+    					
+    					son_hit.play();
     					return true;
     					
 
     				}
     				if(peDoFlappy >= par.canoChao.y){
-    					soma = 0;
+    					son_hit.play();
     					return true;
     				
 
@@ -250,20 +277,19 @@ function criaCanos() {
     			par.x = par.x - 2;
 
     			if(canos.temColisao(par)){	
-				mudaPraTela(Telas.INICIO);
+				mudaPraTela(Telas.travaGame);
     			}
 
     			if(par.x + canos.largura <= 0){
     				canos.pares.shift();
     				
     				soma = soma + 1;
-
-
-    				console.log("Soma: "+soma);
+    				son_ponto.play();
+    				    				
     				if(soma >= recorde){
     					recorde = soma;
     				}
-    				console.log("recorde: "+recorde);
+    				
     			}
     		});
     	}
@@ -302,7 +328,10 @@ const msgScore = {
 		contexto.fillStyle='white';
 		contexto.lineWidth=4;
 		contexto.fillText(""+soma, (canvas.width / 2)-50/2, 100);
-
+		setTimeout(() =>{
+				soma=0;
+			}, 1000);
+		
 },
 
 };
@@ -312,7 +341,7 @@ const recor = {
 		contexto.font='30px Rubik Mono One';
 		contexto.fillStyle='white';
 		contexto.lineWidth=4;
-		contexto.fillText("Recorde:"+recorde, (canvas.width / 2)-100, 250);
+		contexto.fillText("Recorde:"+recorde, (canvas.width / 2)-120, 250);
 	},
 };
 
@@ -362,6 +391,7 @@ Telas.JOGO = {
   		globais.chao.desenha();
   		globais.flappyBird.desenha();
 
+
 	},
 	click(){
 		globais.flappyBird.pula();
@@ -376,6 +406,22 @@ Telas.JOGO = {
 		contexto.fillText(""+soma, (canvas.width / 2)-50/2, 100);
 
 	}
+};
+Telas.travaGame = {
+	desenha(){
+		planoDeFundo.desenha();
+		globais.canos.desenha();
+  		globais.chao.desenha();
+  		globais.flappyBird.desenhaTravada();
+  		msgScore.desenha();
+  		
+
+	},
+	atualiza(){
+		setTimeout(() =>{
+				mudaPraTela(Telas.INICIO);
+			}, 700);
+	},
 };
 
 
